@@ -4,6 +4,7 @@ import Header from './components/Header';
 import AddInput from './components/AddInput';
 import TodoItem from './components/TodoItem';
 import CheckModal from './components/Modal/CheckModal'
+import EditModal from './components/Modal/EditModal'
 
 function App() {
 
@@ -20,6 +21,8 @@ function App() {
   const [ todoList, setTodoList ] = useState([]);
 
   const [ isShowCheckModal, setShowCheckModal ] = useState(false);
+
+  const [ isShowEditModal, setShowEditModal] = useState(false);
 
   const [ currentData, setCurrentData ] = useState({});
 
@@ -78,8 +81,7 @@ function App() {
     setInputShow(false)
   }, []);
 
-  const openCheckModel = useCallback((id) => {
-    
+  const openCheckModal = useCallback((id) => {
     setCurrentData(() => {
       return todoList.filter(item => item.id === id)[0]
     })
@@ -87,10 +89,35 @@ function App() {
     setShowCheckModal(true)
   }, [todoList])
 
+  const openEditModal = useCallback((id) => {
+    setCurrentData(() => {
+      return todoList.filter(item => item.id === id)[0]
+    })
+
+    setShowEditModal(true)
+  }, [todoList])
+
+  const sumbitEdit = useCallback((newData, id) => {
+    setTodoList((todoList) => {
+      
+      return todoList.map((item) => {
+        if(item.id === id){
+          item = newData
+        }
+
+        return item
+      })
+    })
+
+    setShowEditModal(false)
+  }, [])
+
   return (
     <div className="App">
 
       <CheckModal isShowCheckModal={ isShowCheckModal } closeModal={ ()=>{ setShowCheckModal(false) } } data={ currentData } />
+
+      <EditModal isShowEditModal={ isShowEditModal } data={ currentData } sumbitEdit={ sumbitEdit } />
 
       {/* 
       传入openInput函数，通过修改isInputShow开关AddInput
@@ -111,7 +138,7 @@ function App() {
           todoList.map((item,index) => {
 
             return (
-              <TodoItem data={ item } key={ index } openCheckModel={ openCheckModel } />
+              <TodoItem data={ item } key={ index } openCheckModal={ openCheckModal } openEditModal={ openEditModal } />
             );
           })
         }

@@ -1,7 +1,9 @@
 import React from 'react'
 
-import './index.scss'
 import Modal from '../'
+import { formatDate } from '../../../libs/utils.js'
+import './index.scss'
+
 
 function CheckModal(props) {
 
@@ -9,7 +11,7 @@ function CheckModal(props) {
 
     return (
         <Modal isShowModal={ isShowCheckModal } modalTitle={"查看事项"}>
-            <p className="topic">时间：{ data.id }</p>
+            <p className="topic">时间：{ formatDate(data.id) }</p>
             <p className="topic">内容：{ data.content }</p>
             <p className="topic">状态：{ data.completed ? "已完成" : "未完成" }</p>
 
