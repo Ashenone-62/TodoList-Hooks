@@ -3,6 +3,7 @@ import './App.css';
 import Header from './components/Header';
 import AddInput from './components/AddInput';
 import TodoItem from './components/TodoItem';
+import CheckModal from './components/Modal/CheckModal'
 
 function App() {
 
@@ -17,6 +18,10 @@ function App() {
   定义todoList，修改函数setTodoList，初始值[] 
   */
   const [ todoList, setTodoList ] = useState([]);
+
+  const [ isShowCheckModal, setShowCheckModal ] = useState(false);
+
+  const [ currentData, setCurrentData ] = useState({});
 
   /*
   ⚠⚠⚠
@@ -73,8 +78,19 @@ function App() {
     setInputShow(false)
   }, []);
 
+  const openCheckModel = useCallback((id) => {
+    
+    setCurrentData(() => {
+      return todoList.filter(item => item.id === id)[0]
+    })
+
+    setShowCheckModal(true)
+  }, [todoList])
+
   return (
     <div className="App">
+
+      <CheckModal isShowCheckModal={ isShowCheckModal } closeModal={ ()=>{ setShowCheckModal(false) } } data={ currentData } />
 
       {/* 
       传入openInput函数，通过修改isInputShow开关AddInput
@@ -95,7 +111,7 @@ function App() {
           todoList.map((item,index) => {
 
             return (
-              <TodoItem data={ item } key={ index } />
+              <TodoItem data={ item } key={ index } openCheckModel={ openCheckModel } />
             );
           })
         }

@@ -8,7 +8,7 @@ function TodoItem(props) {
     从props中解构
     data对象
     */ 
-    const { data } = props; 
+    const { data, openCheckModel } = props; 
     
     return (
         <li className="todo-item">
@@ -20,7 +20,7 @@ function TodoItem(props) {
             <span className="content" style={ { 'textDecoration': data.completed ? 'line-through' : 'none' } } >{ data.content }</span>
             {/* 查看，编辑，删除按钮 */}
             <div className="btn-group">
-                <button className="btn btn-primary">查看</button>
+                <button className="btn btn-primary" onClick={ ()=>{ openCheckModel(data.id) } }>查看</button>
                 <button className="btn btn-warning">编辑</button>
                 <button className="btn btn-danger">删除</button>
             </div>
