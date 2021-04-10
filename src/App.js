@@ -81,6 +81,28 @@ function App() {
     setInputShow(false)
   }, []);
 
+  const completeItem = useCallback((id) => {
+    setTodoList((todoList) => {
+      
+      return todoList.map((item) => {
+        if(item.id === id){
+          item.completed = !item.completed
+        }
+
+        return item
+      })
+    })
+  }, [])
+
+  const removeItem = useCallback((id) => {
+    setTodoList((todoList) => {
+      
+      return todoList.filter((item) => {
+        return item.id !== id
+      })
+    })
+  }, [])
+
   const openCheckModal = useCallback((id) => {
     setCurrentData(() => {
       return todoList.filter(item => item.id === id)[0]
@@ -138,7 +160,7 @@ function App() {
           todoList.map((item,index) => {
 
             return (
-              <TodoItem data={ item } key={ index } openCheckModal={ openCheckModal } openEditModal={ openEditModal } />
+              <TodoItem data={ item } key={ index } openCheckModal={ openCheckModal } openEditModal={ openEditModal } completeItem={ completeItem } removeItem={ removeItem } />
             );
           })
         }
