@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import './App.css';
+
 import Header from './components/Header';
 import AddInput from './components/AddInput';
 import TodoItem from './components/TodoItem';
-import CheckModal from './components/Modal/CheckModal'
-import EditModal from './components/Modal/EditModal'
-import NoTodoList from './components/NoTodoList'
+import CheckModal from './components/Modal/CheckModal';
+import EditModal from './components/Modal/EditModal';
+import NoTodoList from './components/NoTodoList';
+
+import './App.css';
 
 function App() {
 
@@ -21,10 +23,22 @@ function App() {
   */
   const [ todoList, setTodoList ] = useState([]);
 
+  /*
+  开关CheckModal
+  定义isShowCheckModal，setShowCheckModal，初始值false
+  */ 
   const [ isShowCheckModal, setShowCheckModal ] = useState(false);
 
+  /*
+  开关EditModal
+  定义isShowEditModal，setShowEditModal，初始值false
+  */ 
   const [ isShowEditModal, setShowEditModal] = useState(false);
 
+  /*
+  保存当前选择的事项
+  定义currentData，setCurrentData，初始值{}
+  */ 
   const [ currentData, setCurrentData ] = useState({});
 
   /*
@@ -53,7 +67,7 @@ function App() {
 
     外部依赖: todoList
     */ 
-    localStorage.setItem('todoData', JSON.stringify(todoList))
+    localStorage.setItem('todoData', JSON.stringify(todoList));
   }, [ todoList ]);
 
   /*
@@ -63,6 +77,8 @@ function App() {
   子组件识别addItem也是认为是新的，从而引发不必要的重绘
   ⚠⚠⚠
   */ 
+
+  /* 添加事项 */ 
   const addItem = useCallback((value) => {
 
     /*
@@ -76,82 +92,112 @@ function App() {
       content: value,
       completed: false
     };
-
-    setTodoList(( todoList )=> [ ...todoList, dataItem ]);
-
-    setInputShow(false)
+    setTodoList(( todoList ) => [ ...todoList, dataItem ]);
+    setInputShow(false);
   }, []);
 
+  /* 完成事项 */
   const completeItem = useCallback((id) => {
+    
+    /*
+    接收参数id
+    修改传入id的事项的checkbox的状态
+    通过map去比对每一项的id，找到后将其completed取反
+    */ 
     setTodoList((todoList) => {
       
       return todoList.map((item) => {
         if(item.id === id){
-          item.completed = !item.completed
+          item.completed = !item.completed;
         }
-
-        return item
+        return item;
       })
     })
   }, [])
 
+  /* 删除事项 */
   const removeItem = useCallback((id) => {
+
+    /*
+    接收参数id
+    删除传入id的事项
+    通过filter过滤掉传入id的事项
+    */ 
     setTodoList((todoList) => {
       
       return todoList.filter((item) => {
-        return item.id !== id
+        return item.id !== id;
       })
     })
   }, [])
 
+  /* 打开查看模态框 */ 
   const openCheckModal = useCallback((id) => {
+    
+    /* 
+    接收参数id
+    将当前点击的事项拿到传给currentData
+    显示模态框
+    */ 
     setCurrentData(() => {
-      return todoList.filter(item => item.id === id)[0]
+      return todoList.filter(item => item.id === id)[0];
     })
-
-    setShowCheckModal(true)
+    setShowCheckModal(true);
   }, [todoList])
 
+  /* 打开编辑模态框 */ 
   const openEditModal = useCallback((id) => {
+    
+    /* 操作同上 */ 
     setCurrentData(() => {
       return todoList.filter(item => item.id === id)[0]
-    })
-
-    setShowEditModal(true)
+    });
+    setShowEditModal(true);
   }, [todoList])
 
+  /* 提交数据 */ 
   const sumbitEdit = useCallback((newData, id) => {
+    
+    /* 
+    接收参数新数据和老id
+    通过老id找到要修改的数据，然后把newData替换老数据
+    关闭编辑模态框
+    */ 
     setTodoList((todoList) => {
       
       return todoList.map((item) => {
         if(item.id === id){
-          item = newData
+          item = newData;
         }
 
-        return item
+        return item;
       })
     })
-
-    setShowEditModal(false)
+    setShowEditModal(false);
   }, [])
 
   return (
     <div className="App">
 
-      <CheckModal isShowCheckModal={ isShowCheckModal } closeModal={ ()=>{ setShowCheckModal(false) } } data={ currentData } />
+      <CheckModal 
+        isShowCheckModal={ isShowCheckModal } 
+        closeModal={ ()=>{ setShowCheckModal(false) } } 
+        data={ currentData } 
+      />
 
-      <EditModal isShowEditModal={ isShowEditModal } data={ currentData } sumbitEdit={ sumbitEdit } />
+      <EditModal 
+        isShowEditModal={ isShowEditModal } 
+        data={ currentData } 
+        sumbitEdit={ sumbitEdit } 
+      />
 
-      {/* 
-      传入openInput函数，通过修改isInputShow开关AddInput
-      */}
+      
       <Header openInput={ () => { setInputShow(!isInputShow) } } />
 
-      {/* 
-      传入isInputShow，AddInput组件根据此判断是否渲染
-      传入addItem函数，添加待办事项
-      */}
-      <AddInput  isInputShow={ isInputShow } addItem={ (value) => { addItem(value) } }  />
+      <AddInput  
+        isInputShow={ isInputShow } 
+        addItem={ (value) => { addItem(value) } }  
+      />
 
       {  
         !todoList || todoList.length === 0
@@ -159,15 +205,18 @@ function App() {
         (<NoTodoList />)
         :
         (<ul className="todo-list">
-          {
-            /*
-            通过map循环渲染TodoItem
-            TodoItem传入todoList中的数据
-            */ 
+          { 
             todoList.map((item,index) => {
   
               return (
-                <TodoItem data={ item } key={ index } openCheckModal={ openCheckModal } openEditModal={ openEditModal } completeItem={ completeItem } removeItem={ removeItem } />
+                <TodoItem 
+                  data={ item } 
+                  key={ index } 
+                  openCheckModal={ openCheckModal } 
+                  openEditModal={ openEditModal } 
+                  completeItem={ completeItem } 
+                  removeItem={ removeItem } 
+                />
               );
             })
           }

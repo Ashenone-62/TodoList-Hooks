@@ -1,12 +1,19 @@
-import React from 'react'
+import React from 'react';
 
-import Modal from '../'
-import { formatDate } from '../../../libs/utils.js'
-import './index.scss'
+import Modal from '../';
+import { formatDate } from '../../../libs/utils.js';
+
+import './index.scss';
 
 
 function CheckModal(props) {
 
+    /* 
+    从props中解构出
+    isShowCheckModal变量，是否显示模态框
+    data对象，事项data
+    closeModal方法，关闭模态框
+    */ 
     const { isShowCheckModal, data, closeModal } = props;
 
     return (

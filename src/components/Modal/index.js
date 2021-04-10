@@ -1,9 +1,16 @@
-import React from 'react'
+import React from 'react';
 
-import './index.scss'
+import './index.scss';
 
 function Modal(props) {
-    /* children大坑 */ 
+    /* 这里children为组件下面所有的字节点，应用场景是插槽 */
+    
+    /* 
+    从props中解构出
+    isShowModal，是否显示模态框
+    modalTitle，模态框标题
+    children，插槽内容
+    */ 
     const { isShowModal, modalTitle, children } = props
 
     return (

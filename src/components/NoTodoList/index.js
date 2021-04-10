@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-import './index.scss'
+import './index.scss';
 
-function NoTodoList(props) {
+/* 无事项提示组件 */ 
+function NoTodoList() {
     
     return (
         <div className="nodatatip-wrapper">
