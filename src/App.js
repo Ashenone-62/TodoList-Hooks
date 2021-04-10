@@ -5,6 +5,7 @@ import AddInput from './components/AddInput';
 import TodoItem from './components/TodoItem';
 import CheckModal from './components/Modal/CheckModal'
 import EditModal from './components/Modal/EditModal'
+import NoTodoList from './components/NoTodoList'
 
 function App() {
 
@@ -151,20 +152,27 @@ function App() {
       传入addItem函数，添加待办事项
       */}
       <AddInput  isInputShow={ isInputShow } addItem={ (value) => { addItem(value) } }  />
-      <ul className="todo-list">
-        {
-          /*
-          通过map循环渲染TodoItem
-          TodoItem传入todoList中的数据
-          */ 
-          todoList.map((item,index) => {
 
-            return (
-              <TodoItem data={ item } key={ index } openCheckModal={ openCheckModal } openEditModal={ openEditModal } completeItem={ completeItem } removeItem={ removeItem } />
-            );
-          })
-        }
-      </ul>
+      {  
+        !todoList || todoList.length === 0
+        ?
+        (<NoTodoList />)
+        :
+        (<ul className="todo-list">
+          {
+            /*
+            通过map循环渲染TodoItem
+            TodoItem传入todoList中的数据
+            */ 
+            todoList.map((item,index) => {
+  
+              return (
+                <TodoItem data={ item } key={ index } openCheckModal={ openCheckModal } openEditModal={ openEditModal } completeItem={ completeItem } removeItem={ removeItem } />
+              );
+            })
+          }
+        </ul>)
+      }
     </div>
   );
 }
